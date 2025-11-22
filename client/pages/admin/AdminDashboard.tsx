@@ -1,6 +1,6 @@
 import { useAuth } from "@/store/auth";
 import { getOrders, saveOrders, type Order } from "@/lib/orders";
-import { useMemo, useState, Suspense } from "react";
+import { useMemo, useState } from "react";
 import { formatCurrency } from "@/lib/money";
 import { Navigate } from "react-router-dom";
 import ProductManager from "@/components/admin/ProductManager";
