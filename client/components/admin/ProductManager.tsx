@@ -20,7 +20,7 @@ import {
   resetInventory,
 } from "@/lib/inventory";
 import { formatCurrency } from "@/lib/money";
-import { Search, Plus, Copy2, Trash2, Eye, EyeOff, Download, Upload, RefreshCw } from "lucide-react";
+import { Search, Plus, Copy, Trash2, Eye, EyeOff, Download, Upload, RefreshCw } from "lucide-react";
 
 type Editable = ManagedProduct;
 
@@ -395,7 +395,7 @@ export default function ProductManager() {
                       }}
                       title="Duplicate"
                     >
-                      <Copy2 size={14} className="mx-auto" />
+                      <Copy size={14} className="mx-auto" />
                     </button>
                     <button
                       className="flex-1 h-9 rounded-lg border border-primary/20 text-xs font-medium transition-all hover:bg-primary/10"
