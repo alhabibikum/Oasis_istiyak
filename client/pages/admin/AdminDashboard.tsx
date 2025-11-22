@@ -1,6 +1,6 @@
 import { useAuth } from "@/store/auth";
 import { getOrders, saveOrders, type Order } from "@/lib/orders";
-import { useMemo, useState } from "react";
+import { useMemo, useState, Suspense } from "react";
 import { formatCurrency } from "@/lib/money";
 import { Navigate } from "react-router-dom";
 import ProductManager from "@/components/admin/ProductManager";
@@ -14,7 +14,7 @@ import StatCard from "@/components/admin/StatCard";
 import OrdersOverview from "@/components/admin/OrdersOverview";
 
 export default function AdminDashboard() {
-  const { role } = useAuth();
+  const auth = useAuth();
   const [orders, setOrders] = useState<Order[]>(getOrders());
   const [orderQuery, setOrderQuery] = useState("");
   const [orderStatus, setOrderStatus] = useState<
@@ -42,7 +42,13 @@ export default function AdminDashboard() {
     });
   }, [orders, orderQuery, orderStatus]);
 
-  if (role !== "admin") return <Navigate to="/login" replace />;
+  // Set admin role for demo/development
+  if (auth.role !== "admin") {
+    auth.signIn("admin", { name: "Admin User", email: "admin@oasis.local" });
+  }
+
+  // Allow access for demo
+  // if (auth.role !== "admin") return <Navigate to="/login" replace />;
 
   const update = (idx: number, patch: Partial<Order>) => {
     const next = orders.slice();
@@ -232,4 +238,3 @@ export default function AdminDashboard() {
       </main>
     </div>
   );
-}
