@@ -791,15 +791,3 @@ function normalizeList(input: any): string[] {
       .filter(Boolean);
   return [];
 }
-
-function normalizeList(input: any): string[] {
-  if (!input) return [];
-  if (Array.isArray(input))
-    return input.map((s) => String(s).trim()).filter(Boolean);
-  if (typeof input === "string")
-    return input
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-  return [];
-}
