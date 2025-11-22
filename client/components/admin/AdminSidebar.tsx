@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 
 interface MenuItem {
   id: string;
@@ -65,56 +65,80 @@ export default function AdminSidebar({
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
+  const closeSidebar = () => setIsOpen(false);
 
   const handleTabChange = (id: string) => {
     onTabChange(id);
-    setIsOpen(false); // Close sidebar on mobile after selection
+    closeSidebar();
   };
 
   return (
     <>
-      {/* Mobile Toggle Button */}
+      {/* Mobile Toggle Button - 3 Line Menu */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-20 left-4 z-40 lg:hidden p-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors shadow-lg"
+        className="fixed top-5 left-4 z-50 lg:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-primary/10 transition-colors"
         aria-label="Toggle sidebar"
       >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
+        <span
+          className={cn(
+            "w-6 h-0.5 bg-foreground transition-all duration-300",
+            isOpen && "rotate-45 translate-y-2"
+          )}
+        />
+        <span
+          className={cn(
+            "w-6 h-0.5 bg-foreground transition-all duration-300",
+            isOpen && "opacity-0"
+          )}
+        />
+        <span
+          className={cn(
+            "w-6 h-0.5 bg-foreground transition-all duration-300",
+            isOpen && "-rotate-45 -translate-y-2"
+          )}
+        />
       </button>
 
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/30 z-30 lg:hidden"
-          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 bg-black/20 z-30 lg:hidden"
+          onClick={closeSidebar}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
         className={cn(
-          "fixed left-0 top-0 h-screen w-72 z-40 transition-transform duration-300 ease-in-out",
-          "lg:translate-x-0 lg:static lg:h-auto lg:w-auto lg:z-auto",
+          "fixed left-0 top-0 h-screen w-72 z-40 transition-all duration-300 ease-in-out",
+          "lg:static lg:h-full lg:w-64 lg:z-auto lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         <div className="h-full flex flex-col bg-gradient-to-b from-white via-white to-primary/5 border-r border-primary/10 shadow-lg lg:shadow-none">
           {/* Sidebar Header */}
-          <div className="pt-20 lg:pt-6 px-6 pb-4">
-            <div className="flex items-center gap-3 mb-2">
+          <div className="pt-20 lg:pt-6 px-6 pb-6 flex items-center justify-between">
+            <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center text-white font-bold text-lg">
                 🏢
               </div>
               <div>
-                <h1 className="font-bold text-lg text-foreground">Admin</h1>
-                <p className="text-xs text-muted-foreground">Dashboard</p>
+                <h1 className="font-bold text-base text-foreground">Admin</h1>
+                <p className="text-xs text-muted-foreground">Control Panel</p>
               </div>
             </div>
-            <div className="h-px bg-primary/10 mt-4" />
+            {/* Close button for mobile */}
+            <button
+              onClick={closeSidebar}
+              className="lg:hidden p-1 hover:bg-primary/10 rounded-lg transition-colors"
+            >
+              <X size={20} className="text-foreground" />
+            </button>
           </div>
 
           {/* Navigation Items */}
-          <nav className="flex-1 overflow-y-auto px-3 space-y-2">
+          <nav className="flex-1 overflow-y-auto px-3 space-y-1.5">
             {items.map((item) => (
               <SidebarMenuItem
                 key={item.id}
@@ -127,24 +151,20 @@ export default function AdminSidebar({
 
           {/* Sidebar Footer */}
           <div className="border-t border-primary/10 p-4 space-y-3">
-            <div className="rounded-xl bg-gradient-to-br from-primary/10 to-accent/5 p-4">
-              <p className="text-xs font-semibold text-foreground mb-2">
-                💡 Pro Tip
+            <div className="rounded-xl bg-gradient-to-br from-primary/10 to-accent/5 p-3">
+              <p className="text-xs font-semibold text-foreground mb-1">
+                💡 Quick Tip
               </p>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Use keyboard shortcut <kbd className="font-mono text-xs bg-black/10 px-1 rounded">H</kbd> to
-                toggle this sidebar
+              <p className="text-xs text-muted-foreground leading-snug">
+                Click menu items to navigate between sections
               </p>
             </div>
-            <button className="w-full py-2 px-3 rounded-lg text-xs font-semibold text-primary border border-primary/30 hover:border-primary/50 hover:bg-primary/5 transition-colors">
-              🔐 Settings
-            </button>
           </div>
         </div>
       </aside>
 
-      {/* Desktop Sidebar Wrapper */}
-      <div className="hidden lg:block lg:w-72 lg:flex-shrink-0" />
+      {/* Desktop Sidebar Placeholder */}
+      <div className="hidden lg:block lg:w-64 lg:flex-shrink-0" />
     </>
   );
 }
@@ -162,10 +182,10 @@ function SidebarMenuItem({
     <button
       onClick={onClick}
       className={cn(
-        "w-full text-left px-4 py-3 rounded-xl transition-all duration-300 group",
+        "w-full text-left px-4 py-3 rounded-lg transition-all duration-300 group",
         "flex items-center gap-3 relative overflow-hidden",
         isActive
-          ? "bg-gradient-to-r from-primary via-primary to-primary/80 text-white shadow-lg shadow-primary/20"
+          ? "bg-gradient-to-r from-primary via-primary to-primary/80 text-white shadow-md shadow-primary/20"
           : "text-foreground hover:bg-primary/5 border border-transparent hover:border-primary/20"
       )}
     >
@@ -182,13 +202,13 @@ function SidebarMenuItem({
       />
 
       {/* Icon */}
-      <span className="text-2xl flex-shrink-0 relative z-10">{item.icon}</span>
+      <span className="text-xl flex-shrink-0 relative z-10">{item.icon}</span>
 
       {/* Content */}
       <div className="flex-1 min-w-0 relative z-10">
         <div
           className={cn(
-            "font-semibold text-sm transition-colors",
+            "font-medium text-sm transition-colors",
             isActive ? "text-white" : "text-foreground"
           )}
         >

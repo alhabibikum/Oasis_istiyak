@@ -52,162 +52,178 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gradient-to-br from-white to-primary/5">
       {/* Fixed Sidebar */}
-      <AdminSidebar
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-      />
+      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto lg:ml-0">
-        <div className="p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
-          <DashboardHeader
-            title="Admin Dashboard"
-            subtitle="Manage customers, products, orders, inventory, posts and site content."
-          />
-
-          {/* Stats Grid */}
-          <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mb-8">
-            <StatCard
-              title="💰 Total Revenue"
-              value={formatCurrency(stats.total)}
-              icon={
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              }
-              bgColor="bg-gradient-to-br from-primary/20 to-primary/10"
-              iconColor="text-primary"
-              trend={{
-                value: 12,
-                isPositive: true,
-              }}
-            />
-
-            <StatCard
-              title="📦 Total Orders"
-              value={stats.placed}
-              icon={
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                  />
-                </svg>
-              }
-              bgColor="bg-gradient-to-br from-blue-100 to-blue-50"
-              iconColor="text-blue-600"
-            />
-
-            <StatCard
-              title="⚠️ Pending Verification"
-              value={stats.pendingVerify}
-              icon={
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              }
-              bgColor="bg-gradient-to-br from-amber-100 to-amber-50"
-              iconColor="text-amber-600"
-              trend={{
-                value: 8,
-                isPositive: false,
-              }}
+      {/* Main Content Area */}
+      <main className="flex-1 overflow-y-auto pt-16 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+          {/* Page Header */}
+          <div className="mb-8">
+            <DashboardHeader
+              title="Admin Dashboard"
+              subtitle="Manage your entire business from one place"
             />
           </div>
 
-          {/* Content Sections */}
+          {/* Overview Tab - Stats and Welcome Card */}
           {activeTab === "overview" && (
-            <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white to-primary/5 p-6 md:p-8">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 p-3">
-                  <svg
-                    className="w-6 h-6 text-primary"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+            <div className="space-y-8">
+              {/* Stats Grid */}
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-max">
+                <StatCard
+                  title="💰 Total Revenue"
+                  value={formatCurrency(stats.total)}
+                  icon={
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  }
+                  bgColor="bg-gradient-to-br from-primary/20 to-primary/10"
+                  iconColor="text-primary"
+                  trend={{
+                    value: 12,
+                    isPositive: true,
+                  }}
+                />
+
+                <StatCard
+                  title="📦 Total Orders"
+                  value={stats.placed}
+                  icon={
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                  }
+                  bgColor="bg-gradient-to-br from-blue-100 to-blue-50"
+                  iconColor="text-blue-600"
+                />
+
+                <StatCard
+                  title="⚠️ Pending Verification"
+                  value={stats.pendingVerify}
+                  icon={
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  }
+                  bgColor="bg-gradient-to-br from-amber-100 to-amber-50"
+                  iconColor="text-amber-600"
+                  trend={{
+                    value: 8,
+                    isPositive: false,
+                  }}
+                />
+              </div>
+
+              {/* Welcome Card */}
+              <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white via-white to-primary/5 p-6 md:p-8 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <div className="flex-shrink-0 rounded-xl bg-gradient-to-br from-primary/20 to-primary/10 p-4 text-3xl">
+                    👋
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-foreground mb-2">
+                      Welcome Back!
+                    </h2>
+                    <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                      You have access to all admin tools. Use the sidebar menu to navigate between different sections. Each section lets you manage specific aspects of your business efficiently.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions Grid */}
+              <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+                {[
+                  { icon: "👥", label: "Customers", count: "45" },
+                  { icon: "📦", label: "Products", count: "128" },
+                  { icon: "🛒", label: "Orders", count: stats.placed },
+                  { icon: "📈", label: "Revenue", count: formatCurrency(stats.total) },
+                ].map((action, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-xl border border-primary/10 bg-white p-5 text-center hover:border-primary/20 hover:shadow-md transition-all cursor-pointer"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-foreground mb-2">
-                    Welcome to Admin Dashboard
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    Manage every aspect of your shop from a single dashboard. Use the sidebar navigation to handle customers, products, inventory, orders, blog posts, and website content. All changes are saved automatically and synced across your store.
-                  </p>
-                </div>
+                    <div className="text-3xl mb-2">{action.icon}</div>
+                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">
+                      {action.label}
+                    </p>
+                    <p className="text-xl font-bold text-foreground">
+                      {action.count}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           )}
 
+          {/* Customers Tab */}
           {activeTab === "customers" && (
-            <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white to-primary/5 overflow-hidden">
+            <div className="rounded-2xl border border-primary/10 bg-white overflow-hidden shadow-sm">
               <CustomerManager />
             </div>
           )}
 
+          {/* Products Tab */}
           {activeTab === "products" && (
-            <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white to-primary/5 overflow-hidden">
+            <div className="rounded-2xl border border-primary/10 bg-white overflow-hidden shadow-sm">
               <ProductManager />
             </div>
           )}
 
+          {/* Orders Tab */}
           {activeTab === "orders" && (
             <div className="space-y-6">
-              <OrdersOverview
-                orders={filteredOrders}
-                onUpdate={update}
-              />
+              <OrdersOverview orders={filteredOrders} onUpdate={update} />
             </div>
           )}
 
+          {/* Inventory Tab */}
           {activeTab === "inventory" && (
-            <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white to-primary/5 overflow-hidden">
+            <div className="rounded-2xl border border-primary/10 bg-white overflow-hidden shadow-sm">
               <InventoryManager />
             </div>
           )}
 
+          {/* Content Tab */}
           {activeTab === "content" && (
-            <div className="grid gap-6">
-              <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white to-primary/5 overflow-hidden">
+            <div className="grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-primary/10 bg-white overflow-hidden shadow-sm">
                 <PostManager />
               </div>
-              <div className="rounded-2xl border border-primary/10 bg-gradient-to-br from-white to-primary/5 overflow-hidden">
+              <div className="rounded-2xl border border-primary/10 bg-white overflow-hidden shadow-sm">
                 <ContentManager />
               </div>
             </div>
