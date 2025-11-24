@@ -31,7 +31,8 @@ export function createServer() {
 
   // SPA fallback route - serve index.html for all non-API routes
   // This MUST be AFTER all API routes
-  app.get("*", (_req, res) => {
+  // Use RegExp instead of wildcard string to avoid Express routing issues
+  app.get(/^(?!\/api\/).*$/, (_req, res) => {
     const indexPath = path.join(__dirname, "../client/index.html");
     res.sendFile(indexPath);
   });
