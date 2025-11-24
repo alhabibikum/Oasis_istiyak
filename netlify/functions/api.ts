@@ -14,6 +14,7 @@ export default async (req: any, context: any) => {
 
       // Collect response chunks
       const responseChunks: Buffer[] = [];
+      let responseResolved = false;
 
       // Create Express-compatible request
       const expressReq = {
@@ -38,6 +39,7 @@ export default async (req: any, context: any) => {
         statusCode: 200,
         headers: { "Content-Type": "application/json" },
         statusMessage: "OK",
+        _ended: false,
         
         write: (chunk: any) => {
           responseChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
@@ -45,10 +47,14 @@ export default async (req: any, context: any) => {
         },
 
         end: (chunk?: any) => {
+          if (expressRes._ended || responseResolved) return;
+          expressRes._ended = true;
+          
           if (chunk) {
             responseChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
           }
           const body = Buffer.concat(responseChunks).toString("utf-8");
+          responseResolved = true;
           resolve({
             statusCode: expressRes.statusCode,
             headers: expressRes.headers,
@@ -57,8 +63,11 @@ export default async (req: any, context: any) => {
         },
 
         json: (data: any) => {
+          if (expressRes._ended || responseResolved) return;
           expressRes.setHeader("Content-Type", "application/json");
-          expressRes.end(JSON.stringify(data));
+          const jsonStr = JSON.stringify(data);
+          responseChunks.push(Buffer.from(jsonStr));
+          expressRes.end();
         },
 
         status: (code: number) => {
@@ -72,18 +81,34 @@ export default async (req: any, context: any) => {
         },
 
         send: (data: any) => {
+          if (expressRes._ended || responseResolved) return;
           if (typeof data === "object") {
             expressRes.json(data);
           } else {
-            expressRes.end(data);
+            responseChunks.push(Buffer.from(String(data)));
+            expressRes.end();
           }
         },
       };
 
+      // Set a timeout to prevent hanging
+      const timeout = setTimeout(() => {
+        if (!responseResolved) {
+          responseResolved = true;
+          resolve({
+            statusCode: 504,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ error: "Function timeout" }),
+          });
+        }
+      }, 25000); // 25 second timeout
+
       // Call Express app
       app(expressReq as any, expressRes as any, (err: any) => {
-        if (err) {
+        clearTimeout(timeout);
+        if (err && !responseResolved) {
           console.error("API Handler Error:", err);
+          responseResolved = true;
           expressRes.statusCode = 500;
           expressRes.json({ error: "Internal Server Error", message: err.message });
         }
